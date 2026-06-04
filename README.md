@@ -24,10 +24,8 @@ This repository contains the full architecture, automation scripts, and governan
 ---
 
 ## 📊 Infrastructure Blueprint
-
-[Hybrid Workforce & Devices]
-│
-▼ (SAML 2.0 / OIDC SSO)
+```text
+[Hybrid Workforce & Devices]│▼ (SAML 2.0 / OIDC SSO)
 ┌────────────────────────────────────────────────────────┐
 │               Microsoft Entra ID (IdP)                 │
 ├────────────────────────────────────────────────────────┤
