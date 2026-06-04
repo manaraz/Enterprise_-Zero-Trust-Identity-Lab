@@ -42,8 +42,8 @@ This repository contains the full architecture, automation scripts, and governan
 │  │       - SCIM Automated User Provisioning         │  │
 │  └───────────┬──────────────────────────────────────┘  │
 └──────────────┼─────────────────────────────────────────┘
-│
-▼
+               │
+               ▼
 ┌────────────────────────────────────────────────────────┐
 │     Connected SaaS Apps (Slack, Zoom, Salesforce)     │
 └────────────────────────────────────────────────────────┘
