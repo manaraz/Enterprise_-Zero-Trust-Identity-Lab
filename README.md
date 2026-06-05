@@ -23,27 +23,53 @@ This repository contains the full architecture, automation scripts, and governan
 
 ---
 
-## 📊 Infrastructure Blueprint
-```text
-[Hybrid Workforce & Devices]│▼ (SAML 2.0 / OIDC SSO)
-┌────────────────────────────────────────────────────────┐
-│               Microsoft Entra ID (IdP)                 │
-├────────────────────────────────────────────────────────┤
-│  ┌────────────────────────┐  ┌──────────────────────┐  │
-│  │  Conditional Access    │  │ Privileged Identity  │  │
-│  │  - User/Sign-in Risk   │  │ Management (PIM)     │  │
-│  │  - Device Compliance   │  │ - Just-In-Time (JIT) │  │
-│  └───────────┬────────────┘  └──────────────────────┘  │
-│              │                                         │
-│              ▼                                         │
-│  ┌──────────────────────────────────────────────────┐  │
-│  │       Enterprise Applications & SSO Gateway       │  │
-│  │       - SAML 2.0 / OIDC Federation               │  │
-│  │       - SCIM Automated User Provisioning         │  │
-│  └───────────┬──────────────────────────────────────┘  │
-└──────────────┼─────────────────────────────────────────┘
-               │
-               ▼
-┌────────────────────────────────────────────────────────┐
-│     Connected SaaS Apps (Slack, Zoom, Salesforce)     │
-└────────────────────────────────────────────────────────┘
+```mermaid
+graph LR
+    %% Professional Enterprise Styling
+    classDef script fill:#EAF2F8,stroke:#2980B9,stroke-width:2px,font-family:'Segoe UI';
+    classDef tenant fill:#EBDEF0,stroke:#8E44AD,stroke-width:3px,font-family:'Segoe UI';
+    classDef group fill:#E8F8F5,stroke:#1ABC9C,stroke-width:2px,font-family:'Segoe UI';
+    classDef policy fill:#FEF9E7,stroke:#F1C40F,stroke-width:2px,font-family:'Segoe UI';
+    classDef apps fill:#FBEEE6,stroke:#E67E22,stroke-width:2px,font-family:'Segoe UI';
+
+    %% 1. Automation Layer (Left)
+    Script["🖥️ PowerShell Automation Script<br><b>[Bulk_Import_Script.ps1]</b>"]:::script
+
+    %% 2. Identity Provider Core (Center)
+    Tenant["🔮 Microsoft Entra ID Tenant<br><b>(Identity Provider)</b>"]:::tenant
+
+    %% 3. Target Security Groups (Vertical Alignment)
+    subgraph Security_Groups ["📁 Dynamic Security Groups"]
+        G_IT["👥 IT-Dept Dynamic Group"]:::group
+        G_HR["👥 HR-Dept Group"]:::group
+        G_ENG["👥 Engineering-Dept Group"]:::group
+        G_SALES["👥 Sales-Dept Group"]:::group
+        G_FIN["👥 Finance-Dept Group"]:::group
+    end
+
+    %% 4. Zero Trust Control Gates
+    CA["🛡️ Conditional Access Policy<br><b>[MFA & Location Check]</b>"]:::policy
+    PIM["🔑 Privileged Identity Management<br><b>[PIM / Just-In-Time]</b>"]:::policy
+
+    %% 5. Target Cloud Applications (Right)
+    CloudApps["☁️ Enterprise Cloud Applications<br><b>[Office 365 / SaaS Apps / SSO]</b>"]:::apps
+
+    %% --- Architectural Relationships & Flow ---
+    
+    %% User Provisioning Flow
+    Script --> |"Graph API / Bulk Import"| Tenant
+
+    %% Internal Tenant Hierarchy
+    Tenant -.-> G_IT
+    Tenant -.-> G_HR
+    Tenant -.-> G_ENG
+    Tenant -.-> G_SALES
+    Tenant -.-> G_FIN
+
+    %% Security Enforcement Gates
+    CA ==> Tenant
+    PIM ==> Tenant
+
+    %% Conditional Access Routing
+    CA --> |"🔒 Enforce MFA (Verified)"| CloudApps
+    PIM --> |"⏳ JIT Activation (Approved)"| CloudApps
