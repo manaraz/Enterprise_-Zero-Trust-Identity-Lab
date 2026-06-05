@@ -22,7 +22,9 @@ This repository contains the full architecture, automation scripts, and governan
 * *Conditional Access for SaaS:* Enforcing specialized security barriers (e.g., blocking external storage downloads on unmanaged devices) specifically for non-Microsoft enterprise apps.
 
 ---
+# 🏗️ Enterprise Infrastructure Blueprint
 
+To architect an automated, scalable, and secure identity infrastructure, the project follows the Zero Trust framework aligned with Microsoft Entra ID best practices. The following structural diagram illustrates the lifecycle of identity management, conditional access enforcement, and automated provisioning designed for this 500-employee enterprise lab:
 ```mermaid
 graph LR
     %% Professional Enterprise Styling
