@@ -28,8 +28,4 @@ To architect an automated, scalable, and secure identity infrastructure, this pr
 
 The structural blueprint below maps out the production-ready identity lifecycle management (ILM), attribute-based access control (ABAC), and the exact authentication flow enforced across the 500-employee enterprise lab:
 
-<div align="center">
-  <img src="architecture.svg" alt="Enterprise Identity Blueprint" width="100%"/>
-</div>
-
-
+![Enterprise Identity Blueprint](architecture.svg)
