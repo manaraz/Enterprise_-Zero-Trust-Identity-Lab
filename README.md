@@ -30,62 +30,55 @@ The structural blueprint below maps out the production-ready identity lifecycle 
 
 ```mermaid
 graph TD
-    %% Advanced Enterprise Styling
-    classDef source fill:#1F4E79,stroke:#002060,stroke-width:2px,font-color:#FFFFFF,font-family:'Segoe UI';
-    classDef validation fill:#7F7F7F,stroke:#3B3B3B,stroke-width:2px,font-color:#FFFFFF,font-family:'Segoe UI';
-    classDef automation fill:#2F5597,stroke:#1F3864,stroke-width:2px,font-color:#FFFFFF,font-family:'Segoe UI';
-    classDef tenant fill:#7030A0,stroke:#3B1754,stroke-width:2px,font-color:#FFFFFF,font-family:'Segoe UI';
-    classDef userObj fill:#8FAADC,stroke:#2F5597,stroke-width:2px,font-color:#1F3864,font-family:'Segoe UI';
-    classDef group fill:#A9D18E,stroke:#385723,stroke-width:2px,font-color:#385723,font-family:'Segoe UI';
-    classDef engine fill:#F8CBAD,stroke:#C65911,stroke-width:2px,font-color:#C65911,font-family:'Segoe UI';
-    classDef compliance fill:#E2EFDA,stroke:#375623,stroke-width:2px,font-color:#375623,font-family:'Segoe UI';
-    classDef apps fill:#FCE4D6,stroke:#C65911,stroke-width:2px,font-color:#C65911,font-family:'Segoe UI';
+    %% Custom Styling to Match Claude's Bright/Clean Palette 100%
+    classDef source fill:#EAF2F8,stroke:#2980B9,stroke-width:2px,font-family:'Segoe UI';
+    classDef validation fill:#F4F6F7,stroke:#7F8C8D,stroke-width:2px,font-family:'Segoe UI';
+    classDef automation fill:#EAF2F8,stroke:#2980B9,stroke-width:2px,font-family:'Segoe UI';
+    classDef tenant fill:#F5EEF8,stroke:#8E44AD,stroke-width:2px,font-family:'Segoe UI';
+    classDef userObj fill:#EEF2F7,stroke:#2F5597,stroke-width:2px,font-family:'Segoe UI';
+    classDef group fill:#E8F8F5,stroke:#1ABC9C,stroke-width:2px,font-family:'Segoe UI';
+    classDef engine fill:#FEF9E7,stroke:#F1C40F,stroke-width:2px,font-family:'Segoe UI';
+    classDef apps fill:#FBEEE6,stroke:#E67E22,stroke-width:2px,font-family:'Segoe UI';
 
-    %% 1. Identity Source & Validation Layer
-    HR_Data["📋 Enterprise HR Data<br><small>500-employee roster • joiner / mover / leaver events</small>"]:::source
-    Validation["⚙️ Attribute Validation Layer<br><small>Rejects missing: dept • jobTitle • location</small>"]:::validation
-    Script["🖥️ PowerShell Automation<br><small>Graph API /users • bulk provisioning</small>"]:::automation
+    %% 1. Identity Source & Automation Layer (Top)
+    HR_Data["📋 Enterprise HR Data / Employee Roster<br>(500 Employees Base)"]:::source
+    Validation["⚙️ Attribute Validation Layer<br>Rejects missing: dept • jobTitle • location"]:::validation
+    Script["🖥️ PowerShell Automation Script<br><b>[Bulk_Import_Script.ps1]</b>"]:::automation
 
-    %% 2. Core Tenant Boundary
-    subgraph Entra_Tenant ["🔮 Microsoft Entra ID Tenant Boundary"]
-        Users["👤 User Objects<br><small>Department • JobTitle • officeLocation</small>"]:::userObj
-        Intune["📱 Intune Compliance<br><small>Device Health & Signals</small>"]:::compliance
+    %% 2. Microsoft Entra ID Tenant Boundary (Center)
+    subgraph Entra_ID_Tenant ["🔮 Microsoft Entra ID Tenant Boundary"]
+        Users["👤 Created User Objects<br>(Attributes: Department, JobTitle)"]:::userObj
         
-        %% Dynamic Attribute Security Groups
-        subgraph Dynamic_Groups ["📁 Attribute-Driven Dynamic Security Groups (~5 min re-evaluation latency)"]
-            G_IT["👥 IT Dept<br><small>dept -eq 'IT'<br>Admin JIT Req.</small>"]:::group
-            G_HR["👥 HR Dept<br><small>dept -eq 'HR'</small>"]:::group
-            G_ENG["👥 Engineering<br><small>dept -eq 'Eng'</small>"]:::group
-            G_SALES["👥 Sales<br><small>dept -eq 'Sales'</small>"]:::group
-            G_FIN["👥 Finance<br><small>dept -eq 'Finance'</small>"]:::group
+        %% Internal Governance & Security Subgraph
+        subgraph Security_Engines ["🔒 Entra Security & Governance Engines"]
+            PIM["🔑 Privileged Identity Management<br><b>[Just-In-Time Role Activation]</b>"]:::engine
+            CA["🛡️ Conditional Access Policy<br><b>[Evaluate: MFA & Location]</b>"]:::engine
         end
 
-        %% Security & Governance Engines
-        subgraph Security_Engines ["🛡️ Security and Governance Engines"]
-            CA["🔐 Conditional Access<br><small>User risk • Sign-in risk<br>MFA • Named location<br>Device compliance<br>Issues access token</small>"]:::engine
-            PIM["🔑 PIM<br><small>Just-in-time role activation<br>Max 4 hr window<br>Approval via Power Automate<br>New token issued on elevation</small>"]:::engine
+        %% Dynamic Security Groups Subgraph
+        subgraph Dynamic_Groups ["📁 Attribute-Based Dynamic Security Groups"]
+            G_IT["👥 IT-Dept Group<br><small>Rule: dept -eq 'IT'</small>"]:::group
+            G_HR["👥 HR-Dept Group<br><small>Rule: dept -eq 'HR'</small>"]:::group
+            G_ENG["👥 Engineering-Dept Group<br><small>Rule: dept -eq 'Eng'</small>"]:::group
+            G_SALES["👥 Sales-Dept Group<br><small>Rule: dept -eq 'Sales'</small>"]:::group
+            G_FIN["👥 Finance-Dept Group<br><small>Rule: dept -eq 'Finance'</small>"]:::group
         end
     end
+    %% 3. Target Applications (Bottom)
+    CloudApps["☁️ Enterprise Cloud Applications<br><b>[Office 365 / SaaS Apps / SSO via SAML-OIDC]</b>"]:::apps
 
-    %% 3. Target Cloud Applications
-    CloudApps["☁️ Enterprise Cloud Applications<br><small>Office 365 • Salesforce • Slack • Zoom • SAML 2.0 / OIDC • SCIM</small>"]:::apps
-
-    %% --- Identity Flows ---
+    %% --- Architectural Relationships & Flow (Exactly like the photo) ---
     HR_Data --> Validation
     Validation --> Script
-    Script --> Users
-    Users --> Dynamic_Groups
+    Script --> |"Microsoft Graph API<br>Bulk User Provisioning"| Users
     
-    %% Governance Signaling
-    G_IT -.-> |"Admin JIT Request"| PIM
-    PIM --> |"Elevate Session Temporarily"| CA
+    %% Split Flows from User Objects
+    Users --> |"Admin JIT Request"| PIM
+    Users --> |"Automated Evaluation<br>Based on Attributes"| Dynamic_Groups
     
-    %% Compliance & Signals
-    Intune -.-> |"Device Signal"| CA
+    %% Policy Evaluation Flow
+    PIM --> |"Elevate Session<br>Temporarily"| CA
     Dynamic_Groups --> |"1. Request Access to Apps"| CA
     
-    %% Final Token Delivery
+    %% Final Enforced Routing to Cloud
     CA --> |"2. Verify MFA Compliance & Issue Access Token"| CloudApps
-    
-    %% Lifecycle Operations
-    HR_Data -.-> |"Leaver: disable -> delete"| CloudApps
