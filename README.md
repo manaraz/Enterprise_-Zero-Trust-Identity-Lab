@@ -1,27 +1,47 @@
 # Enterprise Zero Trust Identity Lab (500+ Users)
 ## 📌 Project Overview
-This repository contains the full architecture, automation scripts, and governance policies for a production-ready *Zero Trust Identity Infrastructure* designed for a hybrid enterprise of 500+ users (*CloudVanguard Technologies). Built entirely within **Microsoft Entra ID*, this lab eliminates manual overhead through advanced automation and enforces strict cryptographic and behavioral access controls.
+This project demonstrates the design and implementation of an *Enterprise-grade, Cloud-Only Zero Trust Identity Architecture* using *Microsoft Entra ID. Built to simulate a production-ready corporate environment for a single-location enterprise, the lab orchestrates automated user lifecycle management for **500 employees*, enforces adaptive access controls, and implements strict identity governance.
+
+The architecture strictly adheres to the core pillars of the *Zero Trust Framework: *Explicitly Verify, Use Least Privileged Access, and Assume Breach.
 
 ---
 
-## 🛠️ Key Architectural Pillars
+## 🏗️ Key Architectural Pillars
 
 ### 1. Automated Lifecycle Management & Governance
-* *HR-Driven Provisioning:* Automated onboarding and offboarding using *Power Automate* and *Microsoft Graph API*.
-* *Dynamic Group Architecture:* Zero-touch user assignment based on multi-value department and location attributes.
-* *Entra ID Governance:* Automated Access Reviews enforced by *Microsoft Security Copilot* analytics to mitigate entitlement creep.
+* *HR-Driven Provisioning:* Automated onboarding and offboarding simulation utilizing an upstream HR data roster (500 employees) processed via a custom *PowerShell automation script* (Bulk_Import_Script.ps1) and integrated via *Microsoft Graph API*.
+* *Attribute Validation Layer:* The ingestion pipeline features a data-validation layer that enforces data integrity, automatically rejecting any identity records missing critical attributes such as Department, JobTitle, or Location.
+* *Dynamic Group Architecture:* Zero-touch, automated user assignment into departmental security groups (e.g., IT, HR, Engineering, Sales, Finance) leveraging complex Entra ID *Dynamic Membership Rules* based on verified user attributes.
 
 ### 2. Adaptive Access Control (Zero Trust)
-* *Risk-Based Conditional Access:* Real-time evaluation of User Risk and Sign-in Risk scores.
-* *Phishing-Resistant MFA:* Enforcement of FIDO2 security keys and passwordless Microsoft Authenticator with number matching.
-* *Privileged Identity Management (PIM):* Just-In-Time (JIT) activation for high-privilege roles (Global Admin, Security Admin) with automated approval workflows routed through Power Automate.
+* *Risk-Based Conditional Access:* Real-time evaluation of security postures utilizing Entra ID Protection. Sign-in attempts are dynamically blocked or forced to remediate based on calculated *User Risk* and *Sign-in Risk* scores.
+* *Phishing-Resistant MFA:* Elimination of weak authentication methods by enforcing passwordless *Microsoft Authenticator with number matching* and *FIDO2 security keys* for high-risk access scenarios.
+* *Targeted Application Scoping:* Security groups act as the foundational criteria inside Conditional Access policies, ensuring that users only inherit access paths mapped directly to their verified corporate roles.
 
-### 3. Enterprise Application SSO & Federation 🌟
-* *Centralized Identity Provider (IdP):* Implementation of SAML 2.0 and OpenID Connect (OIDC) federated Single Sign-On (SSO) for critical SaaS applications (e.g., Slack, Salesforce, Zoom).
-* *Automated App Provisioning:* SCIM-based user lifecycle synchronization directly from Entra ID to external enterprise apps.
-* *Conditional Access for SaaS:* Enforcing specialized security barriers (e.g., blocking external storage downloads on unmanaged devices) specifically for non-Microsoft enterprise apps.
+### 3. Privileged Identity Management (PIM) & Governance
+* *Least Privileged Access:* Elimination of permanent administrative assignments. Highly privileged roles (e.g., Global Administrator, Security Administrator) are governed under *Privileged Identity Management (PIM)*.
+* *Just-In-Time (JIT) Activation:* Administrators must explicitly request role elevation, requiring multi-factor authentication, documented business justifications, and a strict time-bound window.
+* *Automated Approval Workflows:* Integration of JIT requests with *Microsoft Power Automate*, routing high-level approval steps seamlessly to designated security officers before access is provisioned.
+* *Entra ID Access Reviews:* Automated, periodic attestation schedules to review and mitigate entitlement creep, ensuring inactive or transferred users lose elevated privileges automatically.
+
+### 4. Enterprise Application SSO & Federation
+* *Centralized Identity Provider (IdP):* Federation of critical SaaS applications (e.g., Slack, Zoom) using *SAML 2.0* and *OpenID Connect (OIDC)* to centralize authentication control.
+* *Automated App Provisioning:* Implementation of *SCIM-based* synchronization to provision and de-provision identities directly from Entra ID to external enterprise apps.
+* *Data Loss Prevention for SaaS:* Conditional Access policies tailored for SaaS workloads to enforce specialized security barriers, such as blocking external storage downloads when accessing corporate resources from unmanaged or non-compliant devices.
 
 ---
+
+## 🛠️ Technology Stack
+* *Identity Platform:* Microsoft Entra ID (P2)
+* *Automation & API:* PowerShell, Microsoft Graph API, Microsoft Power Automate
+* *Protocols:* SAML 2.0, OIDC, SCIM, OAuth 2.0
+* *Security Framework:* Zero Trust Architecture (ZTA)
+
+---
+
+## 📊 Deployment Architecture
+
+The complete identity provisioning, governance, and authentication validation flow is mapped out in the architectural blueprint below:
 ## 🏗️ Enterprise Infrastructure Blueprint
 
 To architect an automated, scalable, and secure identity infrastructure, this project implements a defense-in-depth architecture aligned with the Zero Trust framework and Microsoft Entra ID best practices. 
